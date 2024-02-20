@@ -8,6 +8,9 @@ import XCTest
 /// ```
 public var diffTool: String? = nil
 
+public var snapshotDirectory: String = "/Users/jenkins/Desktop/snapshot/reference"
+public var snapshotFailureDirectory: String = "/Users/jenkins/Desktop/snapshot/failure"
+
 /// Whether or not to record all new references.
 public var isRecording = false
 
@@ -49,6 +52,7 @@ public func assertSnapshot<Value, Format>(
     as: snapshotting,
     named: name,
     record: recording,
+    snapshotDirectory: snapshotDirectory,
     timeout: timeout,
     file: file,
     testName: testName,
@@ -302,8 +306,7 @@ public func verifySnapshot<Value, Format>(
     }
 
     let artifactsUrl = URL(
-      fileURLWithPath: ProcessInfo.processInfo.environment["SNAPSHOT_ARTIFACTS"]
-        ?? NSTemporaryDirectory(), isDirectory: true
+      fileURLWithPath: snapshotFailureDirectory, isDirectory: true
     )
     let artifactsSubUrl = artifactsUrl.appendingPathComponent(fileName)
     try fileManager.createDirectory(at: artifactsSubUrl, withIntermediateDirectories: true)
